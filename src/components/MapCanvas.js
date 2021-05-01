@@ -15,7 +15,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import ReactLeafletRaster from "./ReactLeafletRaster";
-import PolyDrawer from "./PolyDrawer";
+import PolyDrawer, { PrzykladButton } from "./PolyDrawer";
 
 let icon = L.icon({
   iconSize: [25, 41],
@@ -48,7 +48,7 @@ class MapCanvas extends React.Component {
           id="map"
           center={this.state.center}
           zoom={DEFAULT_VIEWPORT.zoom}
-          style={{ height: "100vh" }}
+          style={{ height: "80vh" }}
         >
           <LayerGroup>
             <LayersControl position="topright">
@@ -62,7 +62,7 @@ class MapCanvas extends React.Component {
               </LayersControl.BaseLayer>
             </LayersControl>
           </LayerGroup>
-          <PolyDrawer drawing={this.props.drawing} />
+          <PolyDrawer />
         </MapContainer>
       </React.Fragment>
     );

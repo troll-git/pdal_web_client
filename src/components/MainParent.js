@@ -24,10 +24,7 @@ const MainParent = (props) => {
         <h1>
           KLick this <button onClick={clickAction}>This</button>
         </h1>
-        <h1>
-          activate drawing <button onClick={toggleDrawing}>This</button>
-        </h1>
-        <MapCanvas drawing={drawing} />
+        <MapCanvas />
       </div>
     </React.Fragment>
   );
