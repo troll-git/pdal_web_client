@@ -16,6 +16,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import ReactLeafletRaster from "./ReactLeafletRaster";
 import PolyDrawer, { PrzykladButton } from "./PolyDrawer";
+import { ArrayToWKT } from "./../utils/conversions";
 
 let icon = L.icon({
   iconSize: [25, 41],
@@ -38,7 +39,31 @@ class MapCanvas extends React.Component {
       dane: "",
       zoom: "",
       center: [50.06143, 19.93658],
+      polygon: [],
     };
+  }
+
+  updatePolygon(dataFromChild) {
+    this.setState({
+      polygon: dataFromChild,
+    });
+  }
+  //just receive the polygon and send it to api
+  componentDidUpdate() {
+    console.log(this.state.polygon);
+    let wkt = ArrayToWKT(this.state.polygon);
+    let url = new URL("http://localhost:5000/pdal");
+    url.search = new URLSearchParams({
+      wkt: wkt,
+    });
+    fetch(url, {
+      method: "GET",
+      /*headers: {
+        "Content-Type": "application/json",
+      },*/
+    })
+      .then((res) => res.json())
+      .then((resjson) => console.log(resjson));
   }
 
   render() {
@@ -62,7 +87,7 @@ class MapCanvas extends React.Component {
               </LayersControl.BaseLayer>
             </LayersControl>
           </LayerGroup>
-          <PolyDrawer />
+          <PolyDrawer update={this.updatePolygon.bind(this)} />
         </MapContainer>
       </React.Fragment>
     );

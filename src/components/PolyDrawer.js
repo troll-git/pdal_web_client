@@ -5,48 +5,6 @@ import { useMap, useMapEvents, Polygon, useMapEvent } from "react-leaflet";
 import L from "leaflet";
 import { useLeaflet } from "react-leaflet";
 
-export const DrawingControl = (props) => {
-  let active = false;
-  const map = useMap();
-  const submitDrawing = L.control({ position: "bottomright" });
-  submitDrawing.onAdd = () => {
-    const but = L.DomUtil.create("button");
-    but.innerHTML = "submit";
-    return but;
-  };
-  const abortDrawing = L.control({ position: "bottomright" });
-  abortDrawing.onAdd = () => {
-    const but = L.DomUtil.create("button");
-    but.innerHTML = "abort";
-    return but;
-  };
-  const drawingControl = L.control({ position: "bottomright" });
-  drawingControl.onAdd = () => {
-    const but = L.DomUtil.create("button");
-    but.innerHTML = "activate drawing";
-    but.onclick = function () {
-      if (!active) {
-        submitDrawing.addTo(map);
-        abortDrawing.addTo(map);
-        active = true;
-        but.innerHTML = "deactivate drawing";
-      } else if (active) {
-        submitDrawing.remove();
-        abortDrawing.remove();
-        active = false;
-        but.innerHTML = "activate drawing";
-      }
-    };
-    return but;
-  };
-
-  useEffect(() => {
-    drawingControl.addTo(map);
-  });
-
-  return null;
-};
-
 const PolyDrawer = (props) => {
   const map = useMap();
 
@@ -59,17 +17,19 @@ const PolyDrawer = (props) => {
   }, [map]);
   const mapEvs = useMapEvents({
     click(e) {
-      console.log(e.originalEvent.target);
       if (e.originalEvent.target.id === "map") {
         if (active)
           setPolygon((prevPoly) => [...prevPoly, [e.latlng.lat, e.latlng.lng]]);
         else {
         }
-      }
-      //setPolygon((prevPoly) => [...prevPoly, [e.latlng.lat, e.latlng.lng]]);
-      else if (e.originalEvent.target.id === "drawing button") {
+      } else if (e.originalEvent.target.id === "drawing button") {
         setActive(!active);
-        console.log(active);
+      } else if (e.originalEvent.target.id === "drawing button") {
+        setActive(!active);
+      } else if (e.originalEvent.target.id == "abort") {
+        setPolygon([]);
+      } else if (e.originalEvent.target.id == "submit") {
+        props.update(polygon);
       }
       //console.log("drawing button clicked");
     },
@@ -80,12 +40,14 @@ const PolyDrawer = (props) => {
   const submitDrawing = L.control({ position: "bottomright" });
   submitDrawing.onAdd = () => {
     const but = L.DomUtil.create("button");
+    but.id = "submit";
     but.innerHTML = "submit";
     return but;
   };
   const abortDrawing = L.control({ position: "bottomright" });
   abortDrawing.onAdd = () => {
     const but = L.DomUtil.create("button");
+    but.id = "abort";
     but.innerHTML = "abort";
     return but;
   };
@@ -96,9 +58,6 @@ const PolyDrawer = (props) => {
     but.id = "drawing button";
     let activeEdit = false;
     but.onclick = function () {
-      //console.log("click button");
-      //console.log(active);
-      //setActive(Date.now());
       if (!activeEdit) {
         activeEdit = true;
         submitDrawing.addTo(map);

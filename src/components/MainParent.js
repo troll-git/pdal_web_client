@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const MainParent = (props) => {
   const [drawing, setDrawing] = useState(false);
   const clickAction = () => {
-    fetch("http://localhost:5000/pdal?name=marro", {
+    fetch("http://localhost:5000/pdal?wkt=marro", {
       method: "GET",
       /*headers: {
         "Content-Type": "application/json",
