@@ -27,8 +27,8 @@ let icon = L.icon({
 });
 
 const DEFAULT_VIEWPORT = {
-  center: [19.93658, 50.06143],
-  zoom: 13,
+  center: [49.56719379821744, 20.622797012329105],
+  zoom: 17,
 };
 
 class MapCanvas extends React.Component {
@@ -38,8 +38,9 @@ class MapCanvas extends React.Component {
     this.state = {
       dane: "",
       zoom: "",
-      center: [50.06143, 19.93658],
+      center: [49.56319379821744, 20.635797012329105],
       polygon: [],
+      url: "",
     };
   }
 
@@ -49,21 +50,25 @@ class MapCanvas extends React.Component {
     });
   }
   //just receive the polygon and send it to api
-  componentDidUpdate() {
-    console.log(this.state.polygon);
-    let wkt = ArrayToWKT(this.state.polygon);
-    let url = new URL("http://localhost:5000/pdal");
-    url.search = new URLSearchParams({
-      wkt: wkt,
-    });
-    fetch(url, {
-      method: "GET",
-      /*headers: {
-        "Content-Type": "application/json",
-      },*/
-    })
-      .then((res) => res.json())
-      .then((resjson) => console.log(resjson));
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.polygon !== this.state.polygon) {
+      console.log(this.state.polygon);
+      let wkt = ArrayToWKT(this.state.polygon);
+      let url = new URL("http://localhost:5000/pdal");
+      url.search = new URLSearchParams({
+        wkt: wkt,
+      });
+      fetch(url, {
+        method: "GET",
+        /*headers: {
+          "Content-Type": "application/json",
+        },*/
+      })
+        .then((res) => res.json())
+        .then((resjson) =>
+          this.setState({ url: "http://127.0.0.1:5500/" + resjson.url })
+        );
+    }
   }
 
   render() {
@@ -88,6 +93,7 @@ class MapCanvas extends React.Component {
             </LayersControl>
           </LayerGroup>
           <PolyDrawer update={this.updatePolygon.bind(this)} />
+          <ReactLeafletRaster url={this.state.url} />
         </MapContainer>
       </React.Fragment>
     );
