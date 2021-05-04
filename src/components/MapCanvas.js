@@ -38,7 +38,7 @@ class MapCanvas extends React.Component {
     this.state = {
       dane: "",
       zoom: "",
-      center: [49.56319379821744, 20.635797012329105],
+      center: [59.96319379821744, 10.635797012329105],
       polygon: [],
       url: "",
     };
@@ -86,8 +86,8 @@ class MapCanvas extends React.Component {
                 <TileLayer
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  maxNativeZoom="19"
-                  maxZoom="19"
+                  maxNativeZoom="21"
+                  maxZoom="21"
                 />
               </LayersControl.BaseLayer>
             </LayersControl>
