@@ -55,7 +55,7 @@ const ReactLeafletRaster = (props) => {
           });
           layer.addTo(map);
 
-          map.fitBounds(layer.getBounds());
+          //map.fitBounds(layer.getBounds());
         });
       });
   }

@@ -21,9 +21,7 @@ const MainParent = (props) => {
   return (
     <React.Fragment>
       <div>
-        <h1>
-          KLick this <button onClick={clickAction}>This</button>
-        </h1>
+        <h1>Raster tjeneste demo</h1>
         <MapCanvas />
       </div>
     </React.Fragment>

@@ -28,7 +28,7 @@ let icon = L.icon({
 
 const DEFAULT_VIEWPORT = {
   center: [49.56719379821744, 20.622797012329105],
-  zoom: 17,
+  zoom: 14,
 };
 
 class MapCanvas extends React.Component {
@@ -38,7 +38,7 @@ class MapCanvas extends React.Component {
     this.state = {
       dane: "",
       zoom: "",
-      center: [59.96319379821744, 10.635797012329105],
+      center: [59.97319379821744, 10.735797012329105],
       polygon: [],
       url: "",
     };
@@ -84,8 +84,9 @@ class MapCanvas extends React.Component {
             <LayersControl position="topright">
               <LayersControl.BaseLayer name="osm" checked={true}>
                 <TileLayer
-                  attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='& copy; <a href="Esri &mdash">Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community</a> contributors'
+                  attribution="<a href='Kartverkethttp://www.statkart.no/'>Kartverket</a>, <a href='Geoveksthttp://www.statkart.no/nor/Land/Fagomrader/Geovekst/'>Geovekst</a>, <a href='kommunerhttp://www.statkart.no/?module=Articles;action=Article.publicShow;ID=14194'</a>kommuner</a> og <a href='Norsk'>http://www.npolar.no/'>Norsk Polarinstitutt</a>"
+                  url="http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4graatone&zoom={z}&x={x}&y={y}"
                   maxNativeZoom="21"
                   maxZoom="21"
                 />
