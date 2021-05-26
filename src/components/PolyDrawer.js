@@ -2,41 +2,75 @@ import React, { useRef } from "react";
 import MapCanvas from "./MapCanvas";
 import { useEffect, useState } from "react";
 import { useMap, useMapEvents, Polygon, useMapEvent } from "react-leaflet";
-import L from "leaflet";
+import L, { polyline } from "leaflet";
 import { useLeaflet } from "react-leaflet";
+import { polygon } from "@turf/helpers"
+import area from "@turf/area"
 
 const PolyDrawer = (props) => {
   const map = useMap();
 
-  const [polygon, setPolygon] = useState([]);
+  const [poly, setPolygon] = useState([]);
+  const [polygonTemp, setPolygonTemp] = useState([]);
+  const [coords, setCoords] = useState([]);
   const [active, setActive] = useState(false);
   //let active = false;
   const purpleOptions = { color: "purple" };
   useEffect(() => {
     drawingControl.addTo(map);
   }, [map]);
+  useEffect(()=>{
+    getArea(poly)
+    },[poly])
   const mapEvs = useMapEvents({
     click(e) {
-      if (e.originalEvent.target.id === "map") {
-        if (active)
-          setPolygon((prevPoly) => [...prevPoly, [e.latlng.lat, e.latlng.lng]]);
-        else {
-        }
-      } else if (e.originalEvent.target.id === "drawing button") {
+       if (e.originalEvent.target.id === "drawing button") {
         setActive(!active);
       } else if (e.originalEvent.target.id === "drawing button") {
         setActive(!active);
       } else if (e.originalEvent.target.id == "abort") {
         setPolygon([]);
       } else if (e.originalEvent.target.id == "submit") {
-        props.update(polygon);
+        props.update(poly);
+      } else {
+        if (active){
+          setPolygon((prevPoly) => [...prevPoly, ([e.latlng.lat, e.latlng.lng])]); 
+        }
       }
+
       //console.log("drawing button clicked");
     },
     onMapLoad(e) {
       console.log(e);
     },
+    mousemove(e){
+      if (e) {
+        if(active){
+          poly.pop()
+          setPolygon((prevPoly) => [...prevPoly, ([e.latlng.lat, e.latlng.lng])]); 
+        }
+      }
+    },
+    contextmenu(e){
+      if(active)setActive(false)
+    }
+   
   });
+  const getArea=(poly)=>{
+    let newPoly=[...poly,poly[0]]
+    console.log(newPoly.length)
+    if(newPoly.length>3){
+      let polyg = polygon([[...newPoly]], { name: 'poly1' });
+      console.log(polyg)
+      let polyArea = area(polyg);
+      console.log(polyArea)
+    }
+    else console.log("not enouth")
+    //var polyg = polygon(...newPoly, { name: 'poly1' });
+    //console.log(polyg)
+
+  }
+
   const submitDrawing = L.control({ position: "bottomright" });
   submitDrawing.onAdd = () => {
     const but = L.DomUtil.create("button");
@@ -73,10 +107,10 @@ const PolyDrawer = (props) => {
     };
     return but;
   };
-
+  
   return (
     <div>
-      <Polygon pathOptions={purpleOptions} positions={polygon} />
+      <Polygon id="polo" className="dfd" pathOptions={purpleOptions} positions={poly} />
     </div>
   );
 };

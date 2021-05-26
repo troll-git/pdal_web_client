@@ -28,7 +28,7 @@ let icon = L.icon({
 
 const DEFAULT_VIEWPORT = {
   center: [49.56719379821744, 20.622797012329105],
-  zoom: 14,
+  zoom: 18,
 };
 
 class MapCanvas extends React.Component {
@@ -38,9 +38,9 @@ class MapCanvas extends React.Component {
     this.state = {
       dane: "",
       zoom: "",
-      center: [59.97319379821744, 10.735797012329105],
+      center: [49.562379821744, 20.635797012329105],
       polygon: [],
-      url: "",
+      url: "http://159.65.197.227:5000/data/start.tif",
     };
   }
 
@@ -54,7 +54,7 @@ class MapCanvas extends React.Component {
     if (prevState.polygon !== this.state.polygon) {
       console.log(this.state.polygon);
       let wkt = ArrayToWKT(this.state.polygon);
-      let url = new URL("http://localhost:5000/pdal");
+      let url = new URL("http://159.65.197.227:5000/pdal");
       url.search = new URLSearchParams({
         wkt: wkt,
       });
@@ -66,7 +66,7 @@ class MapCanvas extends React.Component {
       })
         .then((res) => res.json())
         .then((resjson) =>
-          this.setState({ url: "http://127.0.0.1:5500/" + resjson.url })
+          this.setState({ url: "http://159.65.197.227:5000/" + resjson.url })
         );
     }
   }
@@ -84,9 +84,8 @@ class MapCanvas extends React.Component {
             <LayersControl position="topright">
               <LayersControl.BaseLayer name="osm" checked={true}>
                 <TileLayer
-                  attribution='& copy; <a href="Esri &mdash">Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community</a> contributors'
-                  attribution="<a href='Kartverkethttp://www.statkart.no/'>Kartverket</a>, <a href='Geoveksthttp://www.statkart.no/nor/Land/Fagomrader/Geovekst/'>Geovekst</a>, <a href='kommunerhttp://www.statkart.no/?module=Articles;action=Article.publicShow;ID=14194'</a>kommuner</a> og <a href='Norsk'>http://www.npolar.no/'>Norsk Polarinstitutt</a>"
-                  url="http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4graatone&zoom={z}&x={x}&y={y}"
+                  attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   maxNativeZoom="21"
                   maxZoom="21"
                 />

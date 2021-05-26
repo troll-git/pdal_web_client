@@ -33,7 +33,7 @@ export function ArrayCoordConversion(arr, insrs, outsrs) {
   );
   let new_arr = [];
   arr.map((m) => {
-    new_arr.push(proj4(proj4("WGS84"), proj4("EPSG:25832"), [m[1], m[0]]));
+    new_arr.push(proj4(proj4("WGS84"), proj4("EPSG:2180"), [m[1], m[0]]));
     //console.log(m);
   });
   console.log(new_arr);

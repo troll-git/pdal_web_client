@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 import chroma from "chroma-js";
+import geoblaze from "geoblaze";
+import L from "leaflet";
+
 
 //import { parseGeoraster } from "georaster";
 //import { GeoRasterLayer } from "georaster-layer-for-leaflet";
@@ -12,9 +15,9 @@ let scale = chroma.scale("Spectral").domain([1, 0]);
 
 const ReactLeafletRaster = (props) => {
   const map = useMap();
-  map.on("mousemove", function (e) {
-    //console.log(e.latlng);
-  });
+  /*map.on("mousemove", function (e) {
+    console.log(e.latlng);
+  });*/
   console.log(props.url);
 
   function getRaster(url) {
@@ -44,7 +47,7 @@ const ReactLeafletRaster = (props) => {
             georaster: georaster,
             opacity: 0.86,
             pixelValuesToColorFn: (values) => {
-              let scaledPixelValue = (values[1] - 0) / 25;
+              let scaledPixelValue = (values[1] - 0) / 60;
               let color = scale(scaledPixelValue).hex();
               if (values[1] === -9999) return 0;
               else return color;
@@ -54,7 +57,17 @@ const ReactLeafletRaster = (props) => {
             resolution: 64, // optional parameter for adjusting display resolution
           });
           layer.addTo(map);
-
+          map.on('mousemove',function (e) {
+            //this.openPopup("dd")
+            let height=[]
+            height=geoblaze.identify(georaster, [e.latlng.lng, e.latlng.lat]);
+            if(height){   
+              if(height[1]!==-9999){
+                map.openPopup(`wysokosc: ${height[1].toFixed(2)}`,e.latlng)
+                //console.log(height[1].round(2))
+              }              
+           }           
+          })
           //map.fitBounds(layer.getBounds());
         });
       });
